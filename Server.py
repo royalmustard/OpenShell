@@ -12,8 +12,6 @@ while True:
     if conn:
         print("Got connection from " + addr)
     data = conn.recv(2)
-    if not data:
-        break
     print(data)
 
 conn.close()
