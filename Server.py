@@ -5,11 +5,13 @@ PORT = 42069
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((IP, PORT))
 s.listen(1)
-
-conn, addr = s.accept()
+print("Server started")
 
 while True:
-    data = conn.recv(1024)
+    conn, addr = s.accept()
+    if conn:
+        print("Got connection from " + addr)
+    data = conn.recv(2)
     if not data:
         break
     print(data)
