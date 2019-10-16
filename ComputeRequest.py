@@ -10,4 +10,4 @@ class computeRequest:
 
     def process(self, *args):
 
-        return
+        return "Hi"

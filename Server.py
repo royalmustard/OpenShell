@@ -8,8 +8,10 @@ class Server:
         self.PORT = port
         self.IP = "127.0.0.1"
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.s.bind((self.IP, self.PORT))
         self.s.listen(1)
+        self.conn = None
         print("Server started")
         self.commandlist = {}
 
@@ -23,14 +25,16 @@ class Server:
         if commandname not in self.commandlist.keys():
             print(f"{commandname} does not exist!")
             return
-        self.s.send(str(self.commandlist[commandname]()).encode("utf-8"))
+        res = self.commandlist[commandname](args)
+        print("Sending: "+str(res))
+        self.conn.send(str(res).encode("utf-8"))
 
     def mainloop(self):
         while True:
-            conn, addr = self.s.accept()
-            if conn:
+            self.conn, addr = self.s.accept()
+            if self.conn:
                 print("Got connection from " + addr[0])
-            data = conn.recv(1024)
+            data = self.conn.recv(1024)
             data = data.decode("utf-8")
             print("Recieved: "+data)
             data = data.split(" ")
