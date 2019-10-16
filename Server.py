@@ -30,8 +30,8 @@ class Server:
         self.conn.send(str(res).encode("utf-8"))
 
     def mainloop(self):
+        self.conn, addr = self.s.accept()
         while True:
-            self.conn, addr = self.s.accept()
             if self.conn:
                 print("Got connection from " + addr[0])
             data = self.conn.recv(1024)

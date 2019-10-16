@@ -3,12 +3,13 @@ print("got require")
 local handle = internet.open("127.0.0.1", 42069)
 print("got handle")
 handle.stream.socket.finishConnect()
+handle.setTimeout(1)
 lines = {}
 str = io.read()
 while str do
     handle:write(str)
     data = handle:read(1024)
     print(data)
-    str = io.read()
+    while not str do str = io.read() end
 end
 handle:close()
