@@ -1,5 +1,5 @@
 import socket
-import error
+import MemiumError
 
 
 class Server:
@@ -16,14 +16,14 @@ class Server:
     def add_command(self, creq, overwrite=False):
         commandname = creq.commandname.lower()
         if commandname in self.commandlist.keys() and not overwrite:
-            raise error.CommandAlreadyExistsError
+            raise MemiumError.CommandAlreadyExistsError
         self.commandlist[commandname] = creq.process
 
     def execute_command(self, commandname, args):
         if commandname not in self.commandlist.keys():
             print(f"{commandname} does not exist!")
             return
-        self.s.send(self.commandlist[commandname]())
+        self.s.send(str(self.commandlist[commandname]()).encode("utf-8"))
 
     def mainloop(self):
         while True:
@@ -32,6 +32,7 @@ class Server:
                 print("Got connection from " + addr[0])
             data = conn.recv(1024)
             data = data.decode("utf-8")
+            print("Recieved: "+data)
             data = data.split(" ")
             commandname = data[0]
             args = data[1:]

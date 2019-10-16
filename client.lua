@@ -7,7 +7,7 @@ lines = {}
 str = io.read()
 while str do
     handle:write(str)
-    data = handle.read(1024)
+    data = handle:read(1024)
     print(data)
     str = io.read()
 end
