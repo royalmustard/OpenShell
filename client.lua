@@ -8,7 +8,9 @@ lines = {}
 str = io.read()
 while str do
     handle:write(str)
-    data = handle:read(1024)
+    data = handle:read(8)
+    packet_len = string.find(data, "%d+")
+    data = handle:read(packet_len)
     print(data)
     while not str do str = io.read() end
 end
