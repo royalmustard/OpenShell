@@ -26,20 +26,21 @@ class Server:
             print(f"{commandname} does not exist!")
             return
         res = self.commandlist[commandname](args)
-        header = f"len:{len(res)}"
+        lres = str(len(res)).rjust(4, "0")
+        header = f"len:{lres}"
         print("Sending header: " + header)
         self.conn.send(header.encode("utf-8"))
         ack = self.conn.recv(4)
-        if ack.decode("uft-8") == "true":
+        print(str(ack))
+        if ack.decode("utf-8") == "true":
             print("Sending content: " + str(res))
             self.conn.send(res)
 
-
     def mainloop(self):
         self.conn, addr = self.s.accept()
+        if self.conn:
+            print("Got connection from " + addr[0])
         while True:
-            if self.conn:
-                print("Got connection from " + addr[0])
             data = self.conn.recv(1024)
             data = data.decode("utf-8")
             print("Recieved: "+data)

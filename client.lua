@@ -9,9 +9,11 @@ while str do
     handle:write(str)
     data = handle:read(8)
     packet_len = tonumber(string.match(data, "%d+"))
-    hande:write("true")
+    handle:write("true")
     data = handle:read(packet_len)
     print(data)
+    str = nil
     while not str do str = io.read() end
+    if str == "exit" then break end
 end
 handle:close()
